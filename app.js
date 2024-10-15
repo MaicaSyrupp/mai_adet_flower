@@ -33,13 +33,8 @@ app.use((err, req, res, next) => {
     res.status(err.status || 500).json({ error: err.message || 'Something went wrong!' });
 });
 
-// Start the server
+// Connect to the database and start the server
 const PORT = process.env.APP_PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
-
-// Connect to the database (this is now handled in db.js)
 db.getConnection((err, connection) => {
     if (err) {
         console.error('Database connection failed:', err);
@@ -49,4 +44,9 @@ db.getConnection((err, connection) => {
 
     // Release the connection back to the pool
     connection.release();
+
+    // Start the server
+    app.listen(PORT, () => {
+        console.log(`Server is running on http://localhost:${PORT}`);
+    });
 });

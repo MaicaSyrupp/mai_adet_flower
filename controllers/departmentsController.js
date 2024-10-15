@@ -48,6 +48,11 @@ exports.updateDepartment = (req, res) => {
     const { id } = req.params;
     const { dept_code, dept_name, user_id } = req.body;
 
+    // Check if at least one field is provided for update
+    if (!dept_code && !dept_name && !user_id) {
+        return res.status(400).json({ error: 'At least one field (dept_code, dept_name, user_id) is required for update.' });
+    }
+
     const sql = 'UPDATE departments SET dept_code = ?, dept_name = ?, user_id = ? WHERE dept_id = ?';
     db.query(sql, [dept_code, dept_name, user_id, id], (err, results) => {
         if (err) {

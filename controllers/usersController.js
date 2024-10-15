@@ -48,8 +48,13 @@ exports.getUserById = (req, res) => {
 // Update user by ID
 exports.updateUser = (req, res) => {
     const { username, fullname } = req.body;
-    const sql = 'UPDATE users SET username = ?, fullname = ? WHERE id = ?';
 
+    // Check if at least one field is provided for update
+    if (!username && !fullname) {
+        return res.status(400).json({ error: 'At least one field (username or fullname) is required for update.' });
+    }
+
+    const sql = 'UPDATE users SET username = ?, fullname = ? WHERE id = ?';
     db.query(sql, [username, fullname, req.params.id], (err, results) => {
         if (err) {
             return res.status(500).json({ error: err.message });

@@ -48,6 +48,11 @@ exports.updateCourse = (req, res) => {
     const { id } = req.params;
     const { course_code, course_name, user_id, dept_id } = req.body;
 
+    // Check if at least one field is provided for update
+    if (!course_code && !course_name && !user_id && !dept_id) {
+        return res.status(400).json({ error: 'At least one field (course_code, course_name, user_id, dept_id) is required for update.' });
+    }
+
     const sql = 'UPDATE courses SET course_code = ?, course_name = ?, user_id = ?, dept_id = ? WHERE course_id = ?';
     db.query(sql, [course_code, course_name, user_id, dept_id, id], (err, results) => {
         if (err) {
