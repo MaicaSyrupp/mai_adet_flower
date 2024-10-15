@@ -6,9 +6,12 @@ const pool = mysql.createPool({
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
+    port: process.env.DB_PORT,  // Specify the port from the .env file
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
+    connectTimeout: 10000,  // Increase the connection timeout to 10 seconds
+    ssl: { rejectUnauthorized: true }  // Use SSL if required by Aiven
 });
 
 pool.getConnection((err, connection) => {
